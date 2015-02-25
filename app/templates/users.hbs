@@ -1,0 +1,14 @@
+<h1>
+  Listing Users
+</h1>
+
+{{input class="first-name" value=firstName}}
+{{input class="last-name" value=lastName}}
+
+<button class="create-user" {{action 'createUser'}}>Create User</button>
+
+{{#each user in model}}
+<div class="user">
+  {{user.fullName}}
+</div>
+{{/each}}
