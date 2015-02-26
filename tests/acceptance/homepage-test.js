@@ -2,32 +2,20 @@ import Ember from 'ember';
 import DS from 'ember-data';
 import { module, test } from 'qunit';
 import startApp from '../helpers/start-app';
+import User from 'testing-demo/models/user';
 
 var application;
 
-Ember.Application.initializer({
-  name: 'jeff-fixture-store',
-  after: "store",
-
-  initialize: function(container, application) {
-    // var store = DS.Store.extend({ adapter: DS.FixtureAdapter.extend() });
-    // container.unregister('store:main');
-    // container.register('store:main', store);
-    // container.injection('controller', 'store', 'store:main');
-    var store = container.lookup('store:main');
-    store.set('defaultAdapter', DS.FixtureAdapter.extend());
-  }
-});
-
 module('Acceptance: Homepage', {
   beforeEach: function() {
-    application = startApp();
-    // var fixtureAdapter = DS.FixtureAdapter.create();
-    // var store = DS.Store.create({ adapter: fixtureAdapter });
-    // application.register('store:main', store);
+    User.reopenClass({
+      FIXTURES: [
+        {id: 1, first_name: 'Jo', last_name: 'Jones'}
+      ]
+    });
 
-    //
-    // application.register('data-adapter:main', DS.FixtureAdapter);
+    application = startApp();
+    application.__container__.resolveCache['adapter:application'] = DS.FixtureAdapter;
   },
 
   afterEach: function() {
@@ -45,11 +33,15 @@ test('visiting /', function(assert) {
 
   click('a:contains("Users")');
 
+  andThen(function () {
+    assert.equal(find('.user:first').text().trim(), 'Jones, Jo');
+  });
+
   fillIn('input.first-name', 'Bob');
   fillIn('input.last-name', 'Smith');
   click('button:contains("Create User")');
 
   andThen(function () {
-    assert.equal(find('.user').text().trim(), 'Smith, Bob');
+    assert.equal(find('.user:last').text().trim(), 'Smith, Bob');
   });
 });

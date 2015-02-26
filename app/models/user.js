@@ -1,6 +1,6 @@
 import DS from 'ember-data';
 
-var User = DS.Model.extend({
+export default DS.Model.extend({
   first_name: DS.attr('string'),
   last_name: DS.attr('string'),
 
@@ -9,9 +9,3 @@ var User = DS.Model.extend({
   }.property('first_name,last_name')
 
 });
-
-User.reopenClass({
-  FIXTURES: []
-});
-
-export default User;
