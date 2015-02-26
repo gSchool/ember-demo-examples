@@ -1,0 +1,9 @@
+{{input class="first-name" value=firstName}}
+{{input class="last-name" value=lastName}}
+<button {{action 'save'}} >Create User</button>
+
+{{#each user in model}}
+  <div class="user">
+    {{user.fullName}}
+  </div>
+{{/each}}
